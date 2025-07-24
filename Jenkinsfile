@@ -4,35 +4,41 @@ pipeline {
     environment {
         JAVA_HOME = '/usr/lib/jvm/java-21-openjdk-amd64'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
-        SONARQUBE_SERVER = 'SonarQube' // Name configured in Jenkins > Manage Jenkins > Global Tool Config
+        SONARQUBE_SERVER = 'SonarQubeServer'   // Jenkins SonarQube name
         PROJECT_KEY = 'evolve-tech'
         SONAR_ORG = 'evolve'
     }
 
     tools {
-        maven 'maven-latest'  // Name from Jenkins tool config (update if you used a different name)
+        maven 'Maven3' // Change to your actual Maven tool name in Jenkins
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git url: '', branch: 'main'
             }
         }
 
-        stage('Java & Maven Versions') {
+        stage('Verify Java & Maven') {
             steps {
                 sh 'java -version'
                 sh 'mvn -version'
             }
         }
 
-        stage('Code Quality - SonarQube Scan') {
+        stage('Build Application') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     sh """
-                        mvn clean verify sonar:sonar \
+                        mvn sonar:sonar \
                           -Dsonar.projectKey=${PROJECT_KEY} \
                           -Dsonar.organization=${SONAR_ORG} \
                           -Dsonar.host.url=$SONAR_HOST_URL \
@@ -41,20 +47,14 @@ pipeline {
                 }
             }
         }
-
-        stage('Build Jar') {
-            steps {
-                sh 'mvn clean package -DskipTests'
-            }
-        }
     }
 
     post {
         success {
-            echo '✅ Build and SonarQube analysis completed successfully.'
+            echo '✅ Build and SonarQube scan completed successfully.'
         }
         failure {
-            echo '❌ Build failed. Please check logs.'
+            echo '❌ Pipeline failed. Please check errors.'
         }
     }
 }
