@@ -12,7 +12,6 @@
     <name>Evolve Tech</name>
     <description>DevOps Static Java UI App</description>
 
-    <!-- ✅ Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -43,8 +42,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- ✅ JaCoCo or Sonar plugin dependencies can go here (optional) -->
     </dependencies>
 
     <build>
@@ -53,16 +50,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.4</version>
             </plugin>
 
-            <!-- ✅ Compiler Plugin -->
+            <!-- ✅ Compiler Plugin with Java 21 Fix -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <release>21</release>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
