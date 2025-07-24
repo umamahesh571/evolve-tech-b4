@@ -29,7 +29,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=evolve-tech -Dsonar.host.url=http://<SONAR_URL>:9000 -Dsonar.login=$SONAR_TOKEN'
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=evolve-tech -Dsonar.host.url=http://13.126.127.133:9000 -Dsonar.login=$SONAR_TOKEN'
                 }
             }
         }
