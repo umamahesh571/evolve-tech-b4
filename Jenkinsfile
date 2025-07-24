@@ -17,7 +17,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git url: '', branch: 'main'
+                git url: 'https://github.com/umamahesh571/evolve-tech-b4.git', branch: 'main'
             }
         }
 
